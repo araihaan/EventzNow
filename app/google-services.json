@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "562480852464",
+    "project_id": "eventznow100",
+    "storage_bucket": "eventznow100.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562480852464:android:aa94d12fb2054f8b154135",
+        "android_client_info": {
+          "package_name": "com.example.eventznow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562480852464-sh181g9i1mldj04m09h3jbaces09s466.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn-8TgGTqsTCrDevSNVgLt457diSkWozQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562480852464-sh181g9i1mldj04m09h3jbaces09s466.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
