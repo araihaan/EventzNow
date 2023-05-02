@@ -45,6 +45,7 @@ public class MemberRegister extends AppCompatActivity {
                 Toast.makeText(MemberRegister.this, "You have register successfully!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MemberRegister.this, MemberLogin.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -62,7 +63,6 @@ public class MemberRegister extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(MemberRegister.this, ActivityWelcome.class);
         startActivity(intent);
-        super.onBackPressed(); // call the super method to perform default back action
-        // add your own custom logic here if you need to
+        finish();
     }
 }

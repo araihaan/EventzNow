@@ -48,6 +48,7 @@ public class MemberLogin extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MemberLogin.this, MemberRegister.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -112,7 +113,6 @@ public class MemberLogin extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(MemberLogin.this, ActivityWelcome.class);
         startActivity(intent);
-        super.onBackPressed(); // call the super method to perform default back action
-        // add your own custom logic here if you need to
+        finish();
     }
 }

@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         new Handler().postDelayed(new Runnable() {
         public void run() {
-            Intent i = new Intent(getApplicationContext(), ActivityWelcome.class);
+            Intent i = new Intent(getApplicationContext(), SplashScreen.class);
             startActivity(i);
 
             // Menutup activity splash screen
