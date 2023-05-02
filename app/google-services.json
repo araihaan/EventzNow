@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "562480852464",
+    "firebase_url": "https://eventznow100-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "eventznow100",
     "storage_bucket": "eventznow100.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "562480852464-qiug25n85hc24red4mnaeenk3kdcp19m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eventznow",
+            "certificate_hash": "fb66ec1ccaa686d5bb47fd3239b521ba0528f25b"
+          }
+        },
         {
           "client_id": "562480852464-sh181g9i1mldj04m09h3jbaces09s466.apps.googleusercontent.com",
           "client_type": 3
