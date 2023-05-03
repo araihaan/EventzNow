@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Tickets"
+        android:icon="@drawable/ticket"
+        android:id="@+id/ticket"/>
+    <item
+        android:title="Home"
+        android:icon="@drawable/baseline_home_24"
+        android:id="@+id/home"/>
+    <item
+        android:title="Profil"
+        android:icon="@drawable/baseline_person_24"
+        android:id="@+id/profil"/>
+</menu>
