@@ -22,6 +22,6 @@ public class SplashScreen extends AppCompatActivity {
                 // Menutup activity splash screen
                 finish();
             }
-        }, 3000);
+        }, 1000);
     }
 }

@@ -49,10 +49,10 @@
     <Button
         android:id="@+id/btMemberLogin"
         android:layout_width="221dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
         android:backgroundTint="#3F72AF"
-        android:text="Login Sebagai Member"
+        android:text="Sign In as Member"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -72,11 +72,11 @@
 
     <Button
         android:id="@+id/btAdminLogin"
-        android:layout_width="215dp"
+        android:layout_width="221dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/white"
-        android:text="Login sebagai Admin"
+        android:text="Sign In as Admin"
         android:textColor="#3F72AF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

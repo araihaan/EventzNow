@@ -22,6 +22,6 @@ public class MainActivity extends AppCompatActivity {
             // Menutup activity splash screen
             finish();
         }
-    }, 1);
+    }, 0);
     }
 }
