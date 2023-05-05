@@ -12,6 +12,21 @@
         android:theme="@style/Theme.Design.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".AdminCreateEvent"
+            android:exported="false" />
+        <activity
+            android:name=".AdminTicketFragment"
+            android:exported="false" />
+        <activity
+            android:name=".AdminProfilFragment"
+            android:exported="false" />
+        <activity
+            android:name=".AdminHomeFragment"
+            android:exported="false" />
+        <activity
+            android:name=".AdminMenu"
+            android:exported="false" />
+        <activity
             android:name=".MemberMenu"
             android:exported="false" />
         <activity

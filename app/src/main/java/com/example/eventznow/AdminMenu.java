@@ -13,20 +13,20 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MemberMenu extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener {
+public class AdminMenu extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_menu);
+        setContentView(R.layout.activity_admin_menu);
 
-        replaceFragment(new MemberHomeFragment());
+        replaceFragment(new AdminHomeFragment());
 
         BottomNavigationView navigationView = findViewById(R.id.bottomNavigationView);
         navigationView.setOnItemSelectedListener(this);
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new MemberHomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new AdminHomeFragment()).commit();
     }
 
     @Override
@@ -35,13 +35,13 @@ public class MemberMenu extends AppCompatActivity implements BottomNavigationVie
 
         switch (item.getItemId()) {
             case R.id.home:
-                replaceFragment(new MemberHomeFragment());
+                replaceFragment(new AdminHomeFragment());
                 break;
             case R.id.profil:
-                replaceFragment(new MemberProfilFragment());
+                replaceFragment(new AdminProfilFragment());
                 break;
             case R.id.ticket:
-                replaceFragment(new MemberTicketFragment());
+                replaceFragment(new AdminTicketFragment());
                 break;
         }
 

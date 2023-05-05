@@ -36,7 +36,7 @@ public class MemberRegister extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 database = FirebaseDatabase.getInstance();
-                reference = database.getReference("users");
+                reference = database.getReference("members");
                 String username = registerUsername.getText().toString();
                 String email = registerEmail.getText().toString();
                 String password = registerPassword.getText().toString();
