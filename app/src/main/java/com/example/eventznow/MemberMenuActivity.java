@@ -18,13 +18,17 @@ public class MemberMenuActivity extends AppCompatActivity implements BottomNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_menu);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(this);
+
+        // Set the default fragment
         replaceFragment(new MemberHomeFragment());
 
-        BottomNavigationView navigationView = findViewById(R.id.bottomNavigationView);
-        navigationView.setOnItemSelectedListener(this);
-
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new MemberHomeFragment()).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MemberHomeFragment fragment = new MemberHomeFragment();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -33,18 +37,19 @@ public class MemberMenuActivity extends AppCompatActivity implements BottomNavig
 
         switch (item.getItemId()) {
             case R.id.home:
-                replaceFragment(new MemberHomeFragment());
+                selectedFragment = new MemberHomeFragment();
                 break;
             case R.id.profil:
-                replaceFragment(new MemberProfilFragment());
+                selectedFragment = new MemberProfilFragment();
                 break;
             case R.id.ticket:
-                replaceFragment(new MemberTicketFragment());
+                selectedFragment = new MemberTicketFragment();
                 break;
         }
 
-        return true;
+        replaceFragment(selectedFragment);
 
+        return true;
     }
 
     private void replaceFragment(Fragment fragment) {

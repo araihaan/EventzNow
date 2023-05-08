@@ -8,20 +8,13 @@ import android.os.Handler;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new Handler().postDelayed(new Runnable() {
-        public void run() {
-            Intent i = new Intent(getApplicationContext(), SplashScreen.class);
-            startActivity(i);
-
-            // Menutup activity splash screen
-            finish();
-        }
-    }, 0);
+        Intent i = new Intent(this, SplashScreen.class);
+        startActivity(i);
+        finish();
     }
+
 }

@@ -2,69 +2,86 @@ package com.example.eventznow;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.eventznow.HelperClassEvents;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AdminHomeFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private DatabaseReference eventsRef;
+    private RecyclerView recyclerView;
+    private EventsAdapter adapter;
 
     public AdminHomeFragment() {
         // Required empty public constructor
     }
 
-    public static AdminHomeFragment newInstance(String param1, String param2) {
-        AdminHomeFragment fragment = new AdminHomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_home, container, false);
 
-        Button button = view.findViewById(R.id.btCreateNewEvent);
-        button.setOnClickListener(new View.OnClickListener() {
+        // Initialize the RecyclerView and its adapter
+        recyclerView = view.findViewById(R.id.reEventList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new EventsAdapter(getContext());
+        adapter.setEventsList(new ArrayList<>()); // pass empty ArrayList using setEventsList()
+        recyclerView.setAdapter(adapter);
+
+        // Get the Realtime Database reference for events
+        eventsRef = FirebaseDatabase.getInstance().getReference().child("events");
+
+        // Add spacing between items
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
+
+        // Listen for changes to the events data and update the adapter
+        eventsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<HelperClassEvents> eventsList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String eventname = snapshot.child("eventname").getValue(String.class);
+                    String date = snapshot.child("date").getValue(String.class);
+                    String time = snapshot.child("time").getValue(String.class);
+                    String location = snapshot.child("location").getValue(String.class);
+                    String slot = snapshot.child("slot").getValue(String.class);
+                    String price = snapshot.child("price").getValue(String.class);
+                    HelperClassEvents event = new HelperClassEvents(eventname, date, time, location, slot, price);
+                    eventsList.add(event);
+                }
+                adapter.setEventsList(eventsList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error
+            }
+        });
+
+        // Define the button and its click listener
+        Button createNewEventButton = view.findViewById(R.id.btCreateNewEvent);
+        createNewEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AdminCreateEventActivity.class);
+                Intent intent = new Intent(getContext(), AdminCreateEventActivity.class);
                 startActivity(intent);
             }
         });
 
         return view;
-    }
-
-
-    public void switchToFragment() {
-        AdminHomeFragment fragment = new AdminHomeFragment();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
     }
 }
