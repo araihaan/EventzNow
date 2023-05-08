@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.eventznow">
 
     <application
         android:allowBackup="true"
@@ -11,39 +12,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar"
         tools:targetApi="31">
+
         <activity
-            android:name=".AdminCreateEvent"
-            android:exported="false" />
+            android:name=".AdminCreateEventActivity"
+            android:exported="true" />
         <activity
-            android:name=".AdminTicketFragment"
-            android:exported="false" />
+            android:name=".AdminMenuActivity"
+            android:exported="true" />
         <activity
-            android:name=".AdminProfilFragment"
-            android:exported="false" />
+            android:name=".MemberMenuActivity"
+            android:exported="true" />
         <activity
-            android:name=".AdminHomeFragment"
-            android:exported="false" />
+            android:name=".MemberRegisterActivity"
+            android:exported="true" />
         <activity
-            android:name=".AdminMenu"
-            android:exported="false" />
+            android:name=".AdminLoginActivity"
+            android:exported="true" />
         <activity
-            android:name=".MemberMenu"
-            android:exported="false" />
+            android:name=".MemberLoginActivity"
+            android:exported="true" />
         <activity
-            android:name=".MemberRegister"
-            android:exported="false" />
-        <activity
-            android:name=".AdminLogin"
-            android:exported="false" />
-        <activity
-            android:name=".MemberLogin"
-            android:exported="false" />
-        <activity
-            android:name=".ActivityWelcome"
+            android:name=".ActivityWelcomeActivity"
             android:exported="true" />
         <activity
             android:name=".SplashScreen"
             android:exported="true" />
+
+        <activity
+            android:name=".AdminHomeFragment"
+            tools:ignore="Instantiatable" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -53,6 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

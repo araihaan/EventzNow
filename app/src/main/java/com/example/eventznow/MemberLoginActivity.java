@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -17,9 +15,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import java.util.Objects;
 
-public class AdminLogin extends AppCompatActivity {
+public class MemberLoginActivity extends AppCompatActivity {
 
     EditText loginUsername, loginPassword;
     Button loginButton;
@@ -27,11 +24,12 @@ public class AdminLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_login);
+        setContentView(R.layout.activity_member_login);
 
+        TextView textView = findViewById(R.id.textRegister);
         loginUsername = findViewById(R.id.etUsername);
         loginPassword = findViewById(R.id.etPassword);
-        loginButton = findViewById(R.id.btAdminLogin);
+        loginButton = findViewById(R.id.btMemberLogin);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +40,14 @@ public class AdminLogin extends AppCompatActivity {
                 }
             }
         });
-
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MemberLoginActivity.this, MemberRegisterActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
     public Boolean validateUsername() {
         String val = loginUsername.getText().toString();
@@ -67,7 +72,7 @@ public class AdminLogin extends AppCompatActivity {
     public void checkUser(){
         String userUsername = loginUsername.getText().toString().trim();
         String userPassword = loginPassword.getText().toString().trim();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("admins");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("members");
         Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -79,7 +84,7 @@ public class AdminLogin extends AppCompatActivity {
                         loginUsername.setError(null);
                         String usernameFromDB = snapshot.child(userUsername).child("username").getValue(String.class);
                         String emailFromDB = snapshot.child(userUsername).child("email").getValue(String.class);
-                        Intent intent = new Intent(AdminLogin.this, AdminMenu.class);
+                        Intent intent = new Intent(MemberLoginActivity.this, MemberMenuActivity.class);
                         intent.putExtra("username", usernameFromDB);
                         intent.putExtra("email", emailFromDB);
                         intent.putExtra("password", passwordFromDB);
@@ -103,9 +108,8 @@ public class AdminLogin extends AppCompatActivity {
     //Tombol Kembali
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(AdminLogin.this, ActivityWelcome.class);
+        Intent intent = new Intent(MemberLoginActivity.this, ActivityWelcomeActivity.class);
         startActivity(intent);
-        super.onBackPressed(); // call the super method to perform default back action
-        // add your own custom logic here if you need to
+        finish();
     }
 }

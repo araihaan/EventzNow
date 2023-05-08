@@ -16,7 +16,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(getApplicationContext(), ActivityWelcome.class);
+                Intent i = new Intent(getApplicationContext(), ActivityWelcomeActivity.class);
                 startActivity(i);
 
                 // Menutup activity splash screen

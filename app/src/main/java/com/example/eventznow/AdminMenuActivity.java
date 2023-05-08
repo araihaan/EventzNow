@@ -2,31 +2,33 @@ package com.example.eventznow;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MemberMenu extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener {
+public class AdminMenuActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_menu);
+        setContentView(R.layout.activity_admin_menu);
 
-        replaceFragment(new MemberHomeFragment());
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(this);
 
-        BottomNavigationView navigationView = findViewById(R.id.bottomNavigationView);
-        navigationView.setOnItemSelectedListener(this);
+        // Set the default fragment
+        replaceFragment(new AdminHomeFragment());
 
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new MemberHomeFragment()).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AdminHomeFragment fragment = new AdminHomeFragment();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -35,18 +37,19 @@ public class MemberMenu extends AppCompatActivity implements BottomNavigationVie
 
         switch (item.getItemId()) {
             case R.id.home:
-                replaceFragment(new MemberHomeFragment());
+                selectedFragment = new AdminHomeFragment();
                 break;
             case R.id.profil:
-                replaceFragment(new MemberProfilFragment());
+                selectedFragment = new AdminProfilFragment();
                 break;
             case R.id.ticket:
-                replaceFragment(new MemberTicketFragment());
+                selectedFragment = new AdminTicketFragment();
                 break;
         }
 
-        return true;
+        replaceFragment(selectedFragment);
 
+        return true;
     }
 
     private void replaceFragment(Fragment fragment) {
