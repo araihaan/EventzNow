@@ -1,6 +1,5 @@
 package com.example.eventznow;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,96 +11,104 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class MemberRegisterActivity extends AppCompatActivity {
 
-    EditText registerUsername, registerEmail, registerPassword;
-    TextView loginRedirectText;
-    Button registerButton;
-    FirebaseDatabase database;
-    DatabaseReference reference;
+    private EditText usernameEditText;
+    private EditText emailEditText;
+    private EditText passwordEditText;
+    private Button registerButton;
+    private TextView loginText;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_register);
 
-        registerUsername = findViewById(R.id.etUsername);
-        registerEmail = findViewById(R.id.etEmail);
-        registerPassword = findViewById(R.id.etPassword);
+        // Initialize Firebase Authentication and Database
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+
+        // Obtain the references to the username, email, password, and register button
+        usernameEditText = findViewById(R.id.etUsername);
+        emailEditText = findViewById(R.id.etEmail);
+        passwordEditText = findViewById(R.id.etPassword);
         registerButton = findViewById(R.id.btMemberRegister);
-        TextView textView = findViewById(R.id.textLogin);
+        loginText = findViewById(R.id.textLogin);
 
-        // Initialize Firebase database
-        database = FirebaseDatabase.getInstance();
-
-        // Set OnClickListener for Register Button
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                // Get values from input fields
-                String username = registerUsername.getText().toString().trim();
-                String email = registerEmail.getText().toString().trim();
-                String password = registerPassword.getText().toString().trim();
+            public void onClick(View v) {
+                // Get the values from the input fields
+                String username = usernameEditText.getText().toString().trim();
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
 
-                // Check if all fields are filled
-                if (TextUtils.isEmpty(username) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                    Toast.makeText(MemberRegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                // Validate the input fields
+                if (TextUtils.isEmpty(username)) {
+                    Toast.makeText(getApplicationContext(), "Please enter a username", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Check for duplicate username
-                reference = database.getReference("members").child(username);
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Toast.makeText(MemberRegisterActivity.this, "Username already taken", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Check for duplicate email
-                            reference = database.getReference("members");
-                            Query query = reference.orderByChild("email").equalTo(email);
-                            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        Toast.makeText(MemberRegisterActivity.this, "Email already registered", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        // Register user
-                                        HelperClass helperClass = new HelperClass(username, email, password);
-                                        reference = database.getReference("members").child(username);
-                                        reference.setValue(helperClass);
-                                        Toast.makeText(MemberRegisterActivity.this, "You have registered successfully!", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(MemberRegisterActivity.this, MemberLoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    Toast.makeText(MemberRegisterActivity.this, "Registration failed, please try again later", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(MemberRegisterActivity.this, "Registration failed, please try again later", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                // Register the user with Firebase Authentication
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // Registration successful, get the registered user
+                                FirebaseUser user = mAuth.getCurrentUser();
+
+                                if (user != null) {
+                                    // Set the user's display name with the username
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(username)
+                                            .build();
+
+                                    user.updateProfile(profileUpdates)
+                                            .addOnCompleteListener(updateProfileTask -> {
+                                                if (updateProfileTask.isSuccessful()) {
+                                                    // User's display name updated successfully
+                                                    // Save the user data to the Firebase Realtime Database
+                                                    String userId = user.getUid();
+                                                    User newUser = new User(userId, username, email);
+                                                    mDatabase.child(userId).setValue(newUser);
+
+                                                    // Registration and data saving completed, navigate to the next screen
+                                                    Intent intent = new Intent(MemberRegisterActivity.this, MemberLoginActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                } else {
+                                                    // Failed to update the user's display name
+                                                    Toast.makeText(getApplicationContext(), "Failed to update display name", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            } else {
+                                // Registration failed
+                                Toast.makeText(getApplicationContext(), "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 
-        // Set OnClickListener for Login TextView
-        textView.setOnClickListener(new View.OnClickListener() {
+        loginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MemberRegisterActivity.this, MemberLoginActivity.class);
@@ -111,7 +118,7 @@ public class MemberRegisterActivity extends AppCompatActivity {
         });
     }
 
-    //Tombol Kembali
+    // Tombol Kembali
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(MemberRegisterActivity.this, ActivityWelcomeActivity.class);
@@ -119,3 +126,4 @@ public class MemberRegisterActivity extends AppCompatActivity {
         finish();
     }
 }
+

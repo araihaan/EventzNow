@@ -1,6 +1,6 @@
 package com.example.eventznow;
 
-public class HelperClass {
+public class HelperClassUsers {
     String username, email, password;
     public String getUsername() {
         return username;
@@ -20,11 +20,11 @@ public class HelperClass {
     public void setPassword(String password) {
         this.password = password;
     }
-    public HelperClass(String username, String email, String password) {
+    public HelperClassUsers(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-    public HelperClass() {
+    public HelperClassUsers() {
     }
 }

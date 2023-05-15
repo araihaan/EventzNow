@@ -4,43 +4,74 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
 import android.widget.Button;
 import android.widget.EditText;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MemberLoginActivity extends AppCompatActivity {
 
-    EditText loginUsername, loginPassword;
-    Button loginButton;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private TextView registerText;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_login);
 
-        TextView textView = findViewById(R.id.textRegister);
-        loginUsername = findViewById(R.id.etUsername);
-        loginPassword = findViewById(R.id.etPassword);
+        // Initialize Firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
+
+        // Obtain the references to the username, password, login button, and register text
+        usernameEditText = findViewById(R.id.etUsername);
+        passwordEditText = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.btMemberLogin);
+        registerText = findViewById(R.id.textRegister);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (!validateUsername() | !validatePassword()) {
-                } else {
-                    checkUser();
+            public void onClick(View v) {
+                // Get the values from the input fields
+                String username = usernameEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+
+                // Validate the input fields
+                if (TextUtils.isEmpty(username)) {
+                    Toast.makeText(getApplicationContext(), "Please enter a email", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Sign in the user with Firebase Authentication
+                mAuth.signInWithEmailAndPassword(username, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // Login successful, navigate to the main activity
+                                Intent intent = new Intent(MemberLoginActivity.this, MemberMenuActivity.class);
+                                startActivity(intent);
+                                finish(); // Optional: Finish the login activity if needed
+                            } else {
+                                // Login failed
+                                Toast.makeText(getApplicationContext(), "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
-        textView.setOnClickListener(new View.OnClickListener() {
+
+        registerText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MemberLoginActivity.this, MemberRegisterActivity.class);
@@ -49,63 +80,8 @@ public class MemberLoginActivity extends AppCompatActivity {
             }
         });
     }
-    public Boolean validateUsername() {
-        String val = loginUsername.getText().toString();
-        if (val.isEmpty()) {
-            loginUsername.setError("Username cannot be empty");
-            return false;
-        } else {
-            loginUsername.setError(null);
-            return true;
-        }
-    }
-    public Boolean validatePassword(){
-        String val = loginPassword.getText().toString();
-        if (val.isEmpty()) {
-            loginPassword.setError("Password cannot be empty");
-            return false;
-        } else {
-            loginPassword.setError(null);
-            return true;
-        }
-    }
-    public void checkUser(){
-        String userUsername = loginUsername.getText().toString().trim();
-        String userPassword = loginPassword.getText().toString().trim();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("members");
-        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    loginUsername.setError(null);
-                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
-                    if (passwordFromDB.equals(userPassword)) {
-                        loginUsername.setError(null);
-                        String usernameFromDB = snapshot.child(userUsername).child("username").getValue(String.class);
-                        String emailFromDB = snapshot.child(userUsername).child("email").getValue(String.class);
-                        Intent intent = new Intent(MemberLoginActivity.this, MemberMenuActivity.class);
-                        intent.putExtra("username", usernameFromDB);
-                        intent.putExtra("email", emailFromDB);
-                        intent.putExtra("password", passwordFromDB);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        loginPassword.setError("Invalid Credentials");
-                        loginPassword.requestFocus();
-                    }
-                } else {
-                    loginUsername.setError("User does not exist");
-                    loginUsername.requestFocus();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
 
-    //Tombol Kembali
+    // Tombol Kembali
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(MemberLoginActivity.this, ActivityWelcomeActivity.class);
