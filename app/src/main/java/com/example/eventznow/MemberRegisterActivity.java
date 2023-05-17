@@ -38,7 +38,7 @@ public class MemberRegisterActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
         // Obtain the references to the username, email, password, and register button
-        usernameEditText = findViewById(R.id.etUsername);
+        usernameEditText = findViewById(R.id.etEmail);
         emailEditText = findViewById(R.id.etEmail);
         passwordEditText = findViewById(R.id.etPassword);
         registerButton = findViewById(R.id.btMemberRegister);
@@ -87,7 +87,7 @@ public class MemberRegisterActivity extends AppCompatActivity {
                                                     // User's display name updated successfully
                                                     // Save the user data to the Firebase Realtime Database
                                                     String userId = user.getUid();
-                                                    User newUser = new User(userId, username, email);
+                                                    User newUser = new User(userId, username, email, "member");
                                                     mDatabase.child(userId).setValue(newUser);
 
                                                     // Registration and data saving completed, navigate to the next screen

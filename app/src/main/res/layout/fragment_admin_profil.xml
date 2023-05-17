@@ -39,12 +39,12 @@
             app:layout_constraintTop_toBottomOf="@+id/txtAdminprofile" />
 
         <TextView
-            android:id="@+id/txtAdminusername"
+            android:id="@+id/txtAdminUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="Admin"
+            android:text=""
             android:textColor="@color/mainblue"
             android:textColorHint="@color/mainblue"
             android:textSize="28sp"
@@ -55,17 +55,17 @@
             tools:ignore="HardcodedText"/>
 
         <TextView
-            android:id="@+id/txtAdminemail"
+            android:id="@+id/txtAdminEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="admin@gmail.com"
+            android:text=""
             android:textColor="@color/mainblue"
             android:textColorHint="@color/mainblue"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAdminusername"
+            app:layout_constraintTop_toBottomOf="@+id/txtAdminUsername"
             tools:ignore="HardcodedText" />
 
         <Button
@@ -79,7 +79,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAdminemail"
+            app:layout_constraintTop_toBottomOf="@+id/txtAdminEmail"
             tools:ignore="HardcodedText" />
 
         <Button
