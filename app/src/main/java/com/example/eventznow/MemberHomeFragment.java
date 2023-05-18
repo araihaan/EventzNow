@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +35,8 @@ public class MemberHomeFragment extends Fragment {
         // Initialize the RecyclerView and its adapter
         recyclerView = view.findViewById(R.id.reEventList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new EventsAdapter(getContext());
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        adapter = new EventsAdapter(getContext(), firebaseAuth);
         adapter.setEventsList(new ArrayList<>()); // pass empty ArrayList using setEventsList()
         recyclerView.setAdapter(adapter);
 

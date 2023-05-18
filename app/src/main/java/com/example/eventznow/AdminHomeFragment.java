@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.eventznow.HelperClassEvents;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +38,8 @@ public class AdminHomeFragment extends Fragment {
         // Initialize the RecyclerView and its adapter
         recyclerView = view.findViewById(R.id.reEventList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new EventsAdapter(getContext());
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        adapter = new EventsAdapter(getContext(), firebaseAuth);
         adapter.setEventsList(new ArrayList<>()); // pass empty ArrayList using setEventsList()
         recyclerView.setAdapter(adapter);
 
