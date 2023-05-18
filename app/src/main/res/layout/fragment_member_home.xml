@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reEventList"
+            android:id="@+id/reEventListMember"
             android:layout_width="370dp"
             android:layout_height="630dp"
             android:layout_marginStart="8dp"

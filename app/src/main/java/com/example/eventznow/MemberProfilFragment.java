@@ -85,7 +85,7 @@ public class MemberProfilFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Call the about activity
-                Intent intent = new Intent(getActivity(), About.class);
+                Intent intent = new Intent(requireActivity(), About.class);
                 startActivity(intent);
             }
         });

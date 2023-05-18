@@ -22,7 +22,7 @@ public class MemberHomeFragment extends Fragment {
 
     private DatabaseReference eventsRef;
     private RecyclerView recyclerView;
-    private EventsAdapter adapter;
+    private EventsAdapterMember adapter;
 
     public MemberHomeFragment() {
         // Required empty public constructor
@@ -33,10 +33,10 @@ public class MemberHomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_member_home, container, false);
 
         // Initialize the RecyclerView and its adapter
-        recyclerView = view.findViewById(R.id.reEventList);
+        recyclerView = view.findViewById(R.id.reEventListMember);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        adapter = new EventsAdapter(getContext(), firebaseAuth);
+        adapter = new EventsAdapterMember(getContext(), firebaseAuth);
         adapter.setEventsList(new ArrayList<>()); // pass empty ArrayList using setEventsList()
         recyclerView.setAdapter(adapter);
 
@@ -53,13 +53,14 @@ public class MemberHomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<HelperClassEvents> eventsList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String eventID = snapshot.child("eventID").getValue(String.class);
                     String eventname = snapshot.child("eventname").getValue(String.class);
                     String date = snapshot.child("date").getValue(String.class);
                     String time = snapshot.child("time").getValue(String.class);
                     String location = snapshot.child("location").getValue(String.class);
                     String slot = snapshot.child("slot").getValue(String.class);
                     String price = snapshot.child("price").getValue(String.class);
-                    HelperClassEvents event = new HelperClassEvents(eventname, date, time, location, slot, price);
+                    HelperClassEvents event = new HelperClassEvents(eventID, eventname, date, time, location, slot, price);
                     eventsList.add(event);
                 }
                 adapter.setEventsList(eventsList);

@@ -1,5 +1,6 @@
 package com.example.eventznow;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,30 +18,40 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
-import java.util.UUID;
 
-public class AdminCreateEventActivity extends AppCompatActivity {
+public class AdminEditEventActivity extends AppCompatActivity {
     private Button BtnDatePicker;
     private Button BtnTimePicker;
     private Calendar calendar;
     private int year, month, dayOfMonth;
     private Button BtnEventSlot, BtnEventPrice;
-    private Button BtnCreateButton;
+    private Button BtnUpdateButton;
     private EditText TextEventName, TextEventLocation;
     private TextView TextEventDate, TextEventTime;
 
     FirebaseDatabase database;
     DatabaseReference reference;
-
+    String eventID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_create_event);
+        setContentView(R.layout.activity_admin_edit_event);
+
+        Intent intent = getIntent();
+        eventID = intent.getStringExtra("eventID");
+
+        // Retrieve event details from Firebase
+        retrieveEventDetails(eventID);
 
         TextEventName = findViewById(R.id.eventName);
         TextEventLocation = findViewById(R.id.eventLocation);
@@ -50,7 +61,7 @@ public class AdminCreateEventActivity extends AppCompatActivity {
         BtnTimePicker = findViewById(R.id.buttonTimePicker);
         BtnEventPrice = findViewById(R.id.btn_price);
         BtnEventSlot = findViewById(R.id.btn_memberpicker);
-        BtnCreateButton = findViewById(R.id.btCreateEvent);
+        BtnUpdateButton = findViewById(R.id.btUpdateEvent);
 
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -64,7 +75,7 @@ public class AdminCreateEventActivity extends AppCompatActivity {
         BtnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AdminCreateEventActivity.this,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AdminEditEventActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -100,28 +111,10 @@ public class AdminCreateEventActivity extends AppCompatActivity {
             }
         });
 
-        BtnCreateButton.setOnClickListener(new View.OnClickListener() {
+        BtnUpdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("events");
-                if (FirebaseDatabase.getInstance().getReference() == null) {
-                    Toast.makeText(AdminCreateEventActivity.this, "Failed to connect to database", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String eventID = generateEventID();
-                String eventname = TextEventName.getText().toString();
-                String date = TextEventDate.getText().toString();
-                String time = TextEventTime.getText().toString();
-                String location = TextEventLocation.getText().toString();
-                String slot = BtnEventSlot.getText().toString();
-                String price = BtnEventPrice.getText().toString();
-                HelperClassEvents HelperClassEvents = new HelperClassEvents(eventID, eventname, date, time, location, slot, price);
-                reference.child(eventID).setValue(HelperClassEvents);
-                Toast.makeText(AdminCreateEventActivity.this, "You have created the event successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AdminCreateEventActivity.this, AdminMenuActivity.class);
-                startActivity(intent);
-                finish();
+                updateEvent();
             }
         });
 
@@ -130,8 +123,63 @@ public class AdminCreateEventActivity extends AppCompatActivity {
         TextEventTime.setKeyListener(null);
     }
 
-    private String generateEventID() {
-        return UUID.randomUUID().toString();
+    private void retrieveEventDetails(String eventID) {
+        DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("events").child(eventID);
+        eventRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    HelperClassEvents event = dataSnapshot.getValue(HelperClassEvents.class);
+                    if (event != null) {
+                        TextEventName.setText(event.getEventname());
+                        TextEventLocation.setText(event.getLocation());
+                        TextEventDate.setText(event.getDate());
+                        TextEventTime.setText(event.getTime());
+                        BtnEventSlot.setText(event.getSlot());
+                        BtnEventPrice.setText(event.getPrice());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(AdminEditEventActivity.this, "Failed to retrieve event details: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateEvent() {
+        String eventname = TextEventName.getText().toString();
+        String date = TextEventDate.getText().toString();
+        String time = TextEventTime.getText().toString();
+        String location = TextEventLocation.getText().toString();
+        String slot = BtnEventSlot.getText().toString();
+        String price = BtnEventPrice.getText().toString();
+
+        if (eventname.isEmpty() || date.isEmpty() || time.isEmpty() || location.isEmpty() || slot.isEmpty() || price.isEmpty()) {
+            Toast.makeText(AdminEditEventActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("events").child(eventID);
+
+        HelperClassEvents updatedEvent = new HelperClassEvents(eventID, eventname, date, time, location, slot, price);
+
+        reference.setValue(updatedEvent)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(AdminEditEventActivity.this, "Event updated successfully!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AdminEditEventActivity.this, "Failed to update event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void showTimePickerDialog() {
@@ -194,5 +242,4 @@ public class AdminCreateEventActivity extends AppCompatActivity {
 
         builder.show();
     }
-
 }

@@ -104,7 +104,7 @@ public class AdminProfilFragment extends Fragment {
         FirebaseAuth.getInstance().signOut();
 
         // Redirect the user to the login screen
-        Intent intent = new Intent(getActivity(), MemberLoginActivity.class);
+        Intent intent = new Intent(requireActivity(), AdminLoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         getActivity().finish();

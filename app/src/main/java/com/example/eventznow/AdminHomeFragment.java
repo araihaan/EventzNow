@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.eventznow.HelperClassEvents;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,13 +55,14 @@ public class AdminHomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<HelperClassEvents> eventsList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String eventID = snapshot.child("eventID").getValue(String.class);
                     String eventname = snapshot.child("eventname").getValue(String.class);
                     String date = snapshot.child("date").getValue(String.class);
                     String time = snapshot.child("time").getValue(String.class);
                     String location = snapshot.child("location").getValue(String.class);
                     String slot = snapshot.child("slot").getValue(String.class);
                     String price = snapshot.child("price").getValue(String.class);
-                    HelperClassEvents event = new HelperClassEvents(eventname, date, time, location, slot, price);
+                    HelperClassEvents event = new HelperClassEvents(eventID, eventname, date, time, location, slot, price);
                     eventsList.add(event);
                 }
                 adapter.setEventsList(eventsList);
@@ -79,7 +79,7 @@ public class AdminHomeFragment extends Fragment {
         createNewEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AdminCreateEventActivity.class);
+                Intent intent = new Intent(requireActivity(), AdminCreateEventActivity.class);
                 startActivity(intent);
             }
         });

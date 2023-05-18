@@ -1,30 +1,31 @@
 package com.example.eventznow;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
+public class EventsAdapterMember extends RecyclerView.Adapter<EventsAdapterMember.ViewHolder> {
 
     private List<HelperClassEvents> eventsList;
     private Context context;
     private String userId;
     private DatabaseReference usersRef;
 
-    public EventsAdapter(Context context, FirebaseAuth firebaseAuth) {
+    public EventsAdapterMember(Context context, FirebaseAuth firebaseAuth) {
         this.context = context;
         this.userId = firebaseAuth.getCurrentUser().getUid();
         this.usersRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
@@ -38,7 +39,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_item_member, parent, false);
         return new ViewHolder(view);
     }
 
@@ -53,44 +54,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         holder.eventSlot.setText(event.getSlot());
         holder.eventPrice.setText(event.getPrice());
 
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Toggle the visibility of eventItemAdmin LinearLayout
-                if (holder.eventItemAdmin.getVisibility() == View.GONE) {
-                    holder.eventItemAdmin.setVisibility(View.VISIBLE);
-                } else {
-                    holder.eventItemAdmin.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        holder.btDeleteEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle delete button click here
-                int position = holder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    // Perform the deletion of the event at the given position
-                    deleteEvent(position);
-                }
-            }
-        });
-
-        holder.btEditEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle edit button click here
-                int position = holder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    // Get the event ID of the event to be edited
-                    String eventID = eventsList.get(position).getEventID();
-
-                    // Start the EditEventActivity and pass the event ID
-                    Intent intent = new Intent(context, AdminEditEventActivity.class);
-                    intent.putExtra("eventID", eventID);
-                    context.startActivity(intent);
-                }
+                // Handle the click event here
             }
         });
     }
@@ -104,12 +72,26 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference().child("events");
 
         // Delete the event from the database
-        eventsRef.child(eventID).removeValue();
-
-        // Notify the adapter to update the view
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, eventsList.size());
+        eventsRef.child(eventID).removeValue()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        // Event deleted successfully
+                        // Notify the adapter to update the view
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, eventsList.size());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to delete the event
+                        // Handle the error, if needed
+                    }
+                });
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -124,9 +106,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public TextView eventLocation;
         public TextView eventSlot;
         public TextView eventPrice;
-        public View eventItemAdmin;
-        public Button btDeleteEvent;
-        public Button btEditEvent;
+        public LinearLayout eventItemAdmin;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -137,9 +117,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             eventSlot = itemView.findViewById(R.id.btn_memberpicker);
             eventPrice = itemView.findViewById(R.id.btn_price);
             eventItemAdmin = itemView.findViewById(R.id.eventItemAdmin);
-            btDeleteEvent = itemView.findViewById(R.id.btDeleteevent);
-            btEditEvent = itemView.findViewById(R.id.btEditevent);
         }
-
     }
+
 }
