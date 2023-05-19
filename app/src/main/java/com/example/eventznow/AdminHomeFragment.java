@@ -2,10 +2,12 @@ package com.example.eventznow;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +65,14 @@ public class AdminHomeFragment extends Fragment {
                     String location = snapshot.child("location").getValue(String.class);
                     String slot = snapshot.child("slot").getValue(String.class);
                     String price = snapshot.child("price").getValue(String.class);
-                    HelperClassEvents event = new HelperClassEvents(eventID, eventname, date, time, location, slot, price);
+
+                    List<String> joinedUsersList = new ArrayList<>();
+                    for (DataSnapshot userSnapshot : snapshot.child("joinedUsersList").getChildren()) {
+                        String userID = userSnapshot.getValue(String.class);
+                        joinedUsersList.add(userID);
+                    }
+
+                    HelperClassEvents event = new HelperClassEvents(eventID, eventname, date, time, location, slot, price, joinedUsersList);
                     eventsList.add(event);
                 }
                 adapter.setEventsList(eventsList);

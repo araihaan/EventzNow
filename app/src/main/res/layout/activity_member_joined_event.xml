@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemberEventDetailActivity"
+    tools:context=".MemberJoinedEventActivity"
     android:background="@color/mainwhite">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,67 +15,62 @@
         android:background="@drawable/curve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEventDetail">
+        app:layout_constraintTop_toBottomOf="@+id/txtJoined">
 
         <TextView
-            android:id="@+id/txtTime"
+            android:id="@+id/txtOrderId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
-            android:layout_marginBottom="74dp"
-            android:text="Time"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="Order ID"
             android:textColor="@color/mainblue"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/txtLocation"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventId"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtLocation"
+            android:id="@+id/txtPayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="74dp"
-            android:text="Location"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="Payment"
             android:textColor="@color/mainblue"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/txtSlot"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtOrderId"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtPrice"
+            android:id="@+id/txtTotalpay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Price"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="Total Pay"
             android:textColor="@color/mainblue"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.869"
+            app:layout_constraintTop_toBottomOf="@+id/txtAmount"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtSlot"
+            android:id="@+id/txtAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="74dp"
-            android:text="Slot"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="Amount"
             android:textColor="@color/mainblue"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/txtPrice"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtPayment"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -94,92 +89,88 @@
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtDate"
+            android:id="@+id/txtEventId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="220dp"
-            android:layout_marginBottom="74dp"
-            android:text="Date"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="Event ID"
             android:textColor="@color/mainblue"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/txtLocation"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtDateString"
+            android:id="@+id/txtEventIdString"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="220dp"
+            android:layout_marginEnd="80dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/mainblue"
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtDate"
+            app:layout_constraintTop_toBottomOf="@+id/txtEventId"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtTimeString"
+            android:id="@+id/txtOrderIdString"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
+            android:layout_marginEnd="80dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/mainblue"
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtTime"
+            app:layout_constraintTop_toBottomOf="@+id/txtOrderId"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtLocationString"
+            android:id="@+id/txtPaymentString"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="80dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/mainblue"
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtLocation"
+            app:layout_constraintTop_toBottomOf="@+id/txtPayment"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtSlotString"
+            android:id="@+id/txtAmountString"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="80dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/mainblue"
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtSlot"
+            app:layout_constraintTop_toBottomOf="@+id/txtAmount"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/txtPriceString"
+            android:id="@+id/txtTotalpayString"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="80dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/mainblue"
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPrice"
-            tools:ignore="HardcodedText"
-            tools:layout_editor_absoluteX="68dp" />
+            app:layout_constraintTop_toBottomOf="@+id/txtTotalpay"
+            tools:ignore="HardcodedText" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -195,11 +186,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/txtEventDetail"
+        android:id="@+id/txtJoined"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Event Detail"
+        android:text="Joined !"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -212,12 +203,12 @@
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/btJoinEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/curve"
+        android:id="@+id/btCheck"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/check"
         android:textColor="@color/mainblue"
-        android:text="   Join Event   "
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

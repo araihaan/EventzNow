@@ -1,7 +1,10 @@
 package com.example.eventznow;
 
+import java.util.List;
+
 public class HelperClassEvents {
     String eventID, eventname, date, time, location, slot, price;
+    List<String> joinedUsersList;
     public String getEventID() {
         return eventID;
     }
@@ -44,7 +47,14 @@ public class HelperClassEvents {
     public void setPrice(String price) {
         this.price = price;
     }
-    public HelperClassEvents(String eventID, String eventname, String date, String time, String location, String slot, String price) {
+    public List<String> getJoinedUsersList() {
+        return joinedUsersList;
+    }
+
+    public void setJoinedUsersList(List<String> joinedUsersList) {
+        this.joinedUsersList = joinedUsersList;
+    }
+    public HelperClassEvents(String eventID, String eventname, String date, String time, String location, String slot, String price, List<String> joinedUsersList) {
         this.eventID = eventID;
         this.eventname = eventname;
         this.date = date;
@@ -52,6 +62,7 @@ public class HelperClassEvents {
         this.location = location;
         this.slot = slot;
         this.price = price;
+        this.joinedUsersList = joinedUsersList;
     }
     public HelperClassEvents() {
     }

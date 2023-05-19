@@ -60,7 +60,14 @@ public class MemberHomeFragment extends Fragment {
                     String location = snapshot.child("location").getValue(String.class);
                     String slot = snapshot.child("slot").getValue(String.class);
                     String price = snapshot.child("price").getValue(String.class);
-                    HelperClassEvents event = new HelperClassEvents(eventID, eventname, date, time, location, slot, price);
+
+                    List<String> joinedUsersList = new ArrayList<>();
+                    for (DataSnapshot userSnapshot : snapshot.child("joinedUsersList").getChildren()) {
+                        String userID = userSnapshot.getValue(String.class);
+                        joinedUsersList.add(userID);
+                    }
+
+                    HelperClassEvents event = new HelperClassEvents(eventID, eventname, date, time, location, slot, price, joinedUsersList);
                     eventsList.add(event);
                 }
                 adapter.setEventsList(eventsList);

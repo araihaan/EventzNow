@@ -20,13 +20,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class AdminEditEventActivity extends AppCompatActivity {
     private Button BtnDatePicker;
@@ -37,6 +41,7 @@ public class AdminEditEventActivity extends AppCompatActivity {
     private Button BtnUpdateButton;
     private EditText TextEventName, TextEventLocation;
     private TextView TextEventDate, TextEventTime;
+    private String joinedUsers;
 
     FirebaseDatabase database;
     DatabaseReference reference;
@@ -164,23 +169,54 @@ public class AdminEditEventActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("events").child(eventID);
 
-        HelperClassEvents updatedEvent = new HelperClassEvents(eventID, eventname, date, time, location, slot, price);
+        // Retrieve the current joinedUsersList from the database
+        reference.child("joinedUsersList").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    List<String> joinedUsersList = new ArrayList<>();
 
-        reference.setValue(updatedEvent)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(AdminEditEventActivity.this, "Event updated successfully!", Toast.LENGTH_SHORT).show();
-                        finish();
+                    // Add the existing joinedUsers to the list
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String userID = snapshot.getValue(String.class);
+                        if (!joinedUsersList.contains(userID)) {
+                            joinedUsersList.add(userID);
+                        }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AdminEditEventActivity.this, "Failed to update event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    // Add the current user's ID to the joinedUsersList
+                    String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    if (!joinedUsersList.contains(userID)) {
+                        joinedUsersList.add(userID);
                     }
-                });
+
+                    HelperClassEvents updatedEvent = new HelperClassEvents(eventID, eventname, date, time, location, slot, price, joinedUsersList);
+
+                    reference.setValue(updatedEvent)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(AdminEditEventActivity.this, "Event updated successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(AdminEditEventActivity.this, "Failed to update event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(AdminEditEventActivity.this, "Failed to retrieve joined users: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+
 
     private void showTimePickerDialog() {
         final Calendar c = Calendar.getInstance();
