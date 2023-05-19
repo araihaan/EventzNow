@@ -3,8 +3,7 @@ package com.example.eventznow;
 import java.util.List;
 
 public class HelperEventOrder {
-    String eventID, orderID, payment, amount, totalpay;
-    List<String> joinedUsersList;
+    String eventID, orderID, eventname, payment, amount, totalpay;
     public String getEventID() {
         return eventID;
     }
@@ -16,6 +15,12 @@ public class HelperEventOrder {
     }
     public void setOrderID(String orderID) {
         this.orderID = orderID;
+    }
+    public String getEventname() {
+        return eventname;
+    }
+    public void setEventname(String eventname) {
+        this.eventname = eventname;
     }
     public String getPayment() {
         return payment;
@@ -35,20 +40,13 @@ public class HelperEventOrder {
     public void setTotalpay(String totalpay) {
         this.totalpay = totalpay;
     }
-    public List<String> getJoinedUsersList() {
-        return joinedUsersList;
-    }
-
-    public void setJoinedUsersList(List<String> joinedUsersList) {
-        this.joinedUsersList = joinedUsersList;
-    }
-    public HelperEventOrder(String eventID, String orderID, String payment, String amount, String totalpay, List<String> joinedUsersList) {
+    public HelperEventOrder(String eventID, String orderID, String eventname, String payment, String amount, String totalpay) {
         this.eventID = eventID;
         this.orderID = orderID;
+        this.eventname = eventname;
         this.payment = payment;
         this.amount = amount;
         this.totalpay = totalpay;
-        this.joinedUsersList = joinedUsersList;
     }
     public HelperEventOrder() {
     }
