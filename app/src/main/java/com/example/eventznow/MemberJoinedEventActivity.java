@@ -20,6 +20,7 @@ public class MemberJoinedEventActivity extends AppCompatActivity {
     private DatabaseReference ordersRef;
     private FirebaseDatabase database;
     private Button btCheck;
+    private String orderID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class MemberJoinedEventActivity extends AppCompatActivity {
         btCheck = findViewById(R.id.btCheck);
 
         Intent intent = getIntent();
-        String orderID = intent.getStringExtra("orderID");
+        orderID = intent.getStringExtra("orderID");
 
         database = FirebaseDatabase.getInstance();
         ordersRef = database.getReference("orders").child(orderID);
@@ -75,8 +76,6 @@ public class MemberJoinedEventActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(MemberJoinedEventActivity.this, MemberMenuActivity.class);
-        startActivity(intent);
         finish();
     }
 }

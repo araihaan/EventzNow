@@ -27,8 +27,8 @@ public class MemberEventDetailActivity extends AppCompatActivity {
 
     private TextView eventName, eventDate, eventTime, eventLocation, eventSlot, eventPrice;
     private Button joinEvent;
-    private String eventID, orderID, payment, amount, totalpay;
-    private DatabaseReference eventsRef, eventsOrder;
+    private String eventID;
+    private DatabaseReference eventsRef;
     FirebaseDatabase database;
 
     @Override
@@ -37,7 +37,7 @@ public class MemberEventDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_member_event_detail);
 
         Intent intent = getIntent();
-        String eventID = intent.getStringExtra("eventID");
+        eventID = intent.getStringExtra("eventID");
 
         eventName = findViewById(R.id.txtEventName);
         eventDate = findViewById(R.id.txtDateString);
@@ -84,7 +84,6 @@ public class MemberEventDetailActivity extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             List<String> joinedUsersList = new ArrayList<>();
 
-                            // Add the existing joinedUsers to the list
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 String userID = snapshot.getValue(String.class);
                                 if (!joinedUsersList.contains(userID)) {
@@ -134,15 +133,14 @@ public class MemberEventDetailActivity extends AppCompatActivity {
             }
         });
     }
-        private String generateOrderID() {
-            String timestamp = String.valueOf(System.currentTimeMillis());
-            String uniqueID = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
-            return timestamp + uniqueID;
-        }
 
+    private String generateOrderID() {
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String uniqueID = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
+        return timestamp + uniqueID;
+    }
 
-
-        @Override
+    @Override
     public void onBackPressed() {
         Intent intent = new Intent(MemberEventDetailActivity.this, MemberMenuActivity.class);
         startActivity(intent);
