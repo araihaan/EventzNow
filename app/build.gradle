@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.eventznow'
-    compileSdk 33
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.example.eventznow"
-        minSdk 26
-        targetSdk 33
+        minSdkVersion 26
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -24,7 +24,7 @@ android {
         }
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
 
@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -50,7 +49,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.2.1'
     implementation 'com.google.firebase:firebase-firestore:24.6.0'
 
-
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:31.5.0')
 
@@ -61,14 +59,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-core:21.1.1'
 
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
-    implementation 'com.google.firebase:firebase-analytics'
-
     // Midtrans
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'com.midtrans:corekit:1.29.1'
+    implementation 'com.midtrans:uikit:1.22.0'
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
-
-    apply plugin: 'com.google.gms.google-services'
 }

@@ -210,15 +210,44 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txtAmount"
+        android:id="@+id/txtPriceDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
-        android:text="Amount"
-        android:textSize="20sp"
+        android:text="IDR"
         android:textColor="@color/mainblue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/txtPriceDetailString"
+        app:layout_constraintTop_toBottomOf="@+id/txtTotalpaymentDetail" />
+
+    <TextView
+        android:id="@+id/txtPriceDetailString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/mainblue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTotalpaymentDetail"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/txtTotalpaymentDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Total Payment"
+        android:textColor="@color/mainblue"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -227,122 +256,11 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/txtAmountString"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:text="1"
-        android:textColor="@color/mainblue"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/btAddAmount"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmount" />
-
-    <Button
-        android:id="@+id/btAddAmount"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/plus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmount" />
-
-    <Button
-        android:id="@+id/btRemoveAmount"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/minus"
-        app:layout_constraintEnd_toStartOf="@+id/txtAmountString"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmount" />
-
-    <TextView
-        android:id="@+id/txtPriceDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="IDR"
-        android:textColor="@color/mainblue"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmount"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/txtPriceDetailString"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text=""
-        android:textColor="@color/mainblue"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/txtPriceDetail"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmount"
-        tools:ignore="HardcodedText" />
-
-    <TextView
-        android:id="@+id/txtTotalpaymentDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Total Payment"
-        android:textColor="@color/mainblue"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPriceDetail"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/txtTotalpaymentDetailString"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:text=""
-        android:textColor="@color/mainblue"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPriceDetail"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/txtTotalpayment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="IDR"
-        android:textColor="@color/mainblue"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txtTotalpaymentDetailString"
-        app:layout_constraintTop_toBottomOf="@+id/txtPriceDetail"
-        app:layout_constraintVertical_bias="0.0" />
-
     <Button
         android:id="@+id/btPaymentMethod"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/curve_convert"
         android:text="  Payment Method  "
         android:textColor="@color/mainwhite"
