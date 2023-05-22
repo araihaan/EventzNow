@@ -24,7 +24,7 @@ public class MemberProfilFragment extends Fragment {
 
     private TextView usernameTextView;
     private TextView emailTextView;
-    private Button logoutButton, about;
+    private Button logoutButton, about, changeprofile;
 
     public MemberProfilFragment() {
         // Required empty public constructor
@@ -38,6 +38,7 @@ public class MemberProfilFragment extends Fragment {
         emailTextView = view.findViewById(R.id.txtMemberEmail);
         logoutButton = view.findViewById(R.id.btnLogout);
         about = view.findViewById(R.id.btnAbout);
+        changeprofile = view.findViewById(R.id.btnChangeprofile);
 
         // Get the currently logged-in user
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -77,6 +78,16 @@ public class MemberProfilFragment extends Fragment {
             public void onClick(View v) {
                 // Call the logout method
                 logout();
+            }
+        });
+
+        // Initialize the change profile button
+        changeprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the about activity
+                Intent intent = new Intent(requireActivity(), ChangeProfileActivity.class);
+                startActivity(intent);
             }
         });
 
