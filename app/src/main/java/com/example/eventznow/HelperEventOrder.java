@@ -3,7 +3,13 @@ package com.example.eventznow;
 import java.util.List;
 
 public class HelperEventOrder {
-    String eventID, orderID, eventname, payment, amount, totalpay;
+    String userId, eventID, orderID, eventname, payment, amount, totalpay, status;
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     public String getEventID() {
         return eventID;
     }
@@ -40,13 +46,21 @@ public class HelperEventOrder {
     public void setTotalpay(String totalpay) {
         this.totalpay = totalpay;
     }
-    public HelperEventOrder(String eventID, String orderID, String eventname, String payment, String amount, String totalpay) {
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public HelperEventOrder(String userId, String eventID, String orderID, String eventname, String payment, String amount, String totalpay, String status) {
+        this.userId = userId;
         this.eventID = eventID;
         this.orderID = orderID;
         this.eventname = eventname;
         this.payment = payment;
         this.amount = amount;
         this.totalpay = totalpay;
+        this.status = status;
     }
     public HelperEventOrder() {
     }

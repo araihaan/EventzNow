@@ -67,7 +67,8 @@ public class MemberJoinedEventActivity extends AppCompatActivity {
         btCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MemberJoinedEventActivity.this, MemberMenuActivity.class);
+                Intent intent = new Intent(MemberJoinedEventActivity.this, DataEventMemberActivity.class);
+                intent.putExtra("orderID", orderID);
                 startActivity(intent);
                 finish();
             }

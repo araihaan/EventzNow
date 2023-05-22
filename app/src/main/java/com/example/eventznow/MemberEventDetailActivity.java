@@ -101,9 +101,10 @@ public class MemberEventDetailActivity extends AppCompatActivity {
                                     eventRef.child("joinedUsersList").setValue(joinedUsersList).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                             String orderID = generateOrderID();
                                             String eventname = eventName.getText().toString();
-                                            HelperEventOrder helperEventOrder = new HelperEventOrder(eventID, orderID, eventname, "-", "1", "Free");
+                                            HelperEventOrder helperEventOrder = new HelperEventOrder(userId, eventID, orderID, eventname, "-", "1", "Free", "Registered");
                                             eventsOrder.child(orderID).setValue(helperEventOrder);
                                             Intent intent = new Intent(MemberEventDetailActivity.this, MemberJoinedEventActivity.class);
                                             intent.putExtra("orderID", orderID);

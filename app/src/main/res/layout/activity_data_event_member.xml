@@ -16,7 +16,7 @@
         android:background="@drawable/curve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEventDetail">
+        app:layout_constraintTop_toBottomOf="@+id/txtDataEvent">
 
         <TextView
             android:id="@+id/txtTime"
@@ -194,11 +194,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/txtEventDetail"
+        android:id="@+id/txtDataEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Event Detail"
+        android:text="Data Event"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -211,58 +211,42 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txtPriceDetail"
+        android:id="@+id/txtStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="IDR"
+        android:text="Status"
         android:textColor="@color/mainblue"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/txtPriceDetailString"
-        app:layout_constraintTop_toBottomOf="@+id/txtTotalpaymentDetail" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <TextView
-        android:id="@+id/txtPriceDetailString"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtStatusString"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
         android:text=""
         android:textColor="@color/mainblue"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTotalpaymentDetail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtStatus"
         tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/txtTotalpaymentDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="Total Payment"
-        android:textColor="@color/mainblue"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
     <Button
-        android:id="@+id/btPaymentMethod"
-        android:layout_width="300dp"
+        android:id="@+id/btnCheck"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/curve_convert"
-        android:text="  Payment Method  "
-        android:textColor="@color/mainwhite"
+        android:background="@drawable/curve"
+        android:text="  Check  "
+        android:textColor="@color/mainblue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

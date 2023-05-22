@@ -38,7 +38,7 @@ public class MemberRegisterActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
         // Obtain the references to the username, email, password, and register button
-        usernameEditText = findViewById(R.id.etEmail);
+        usernameEditText = findViewById(R.id.etUsername);
         emailEditText = findViewById(R.id.etEmail);
         passwordEditText = findViewById(R.id.etPassword);
         registerButton = findViewById(R.id.btMemberRegister);
