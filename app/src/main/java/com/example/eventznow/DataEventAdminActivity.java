@@ -20,7 +20,7 @@ import java.util.List;
 
 public class DataEventAdminActivity extends AppCompatActivity {
 
-    private TextView eventName, eventCreator, eventMemberJoin;
+    private TextView eventName, eventCreator, eventMemberJoin, txtMembersString;
     private RecyclerView recyclerView;
     private MembersJoinedAdapter adapter;
     private FirebaseDatabase database;
@@ -60,6 +60,10 @@ public class DataEventAdminActivity extends AppCompatActivity {
                         List<String> joinedUsersList = event.getJoinedUsersList();
                         if (joinedUsersList != null) {
                             getUsers(joinedUsersList);
+
+                            // Update the member count
+                            int memberCount = joinedUsersList.size();
+                            eventMemberJoin.setText(String.valueOf(memberCount));
                         }
                     }
                 }
@@ -96,3 +100,4 @@ public class DataEventAdminActivity extends AppCompatActivity {
         }
     }
 }
+
