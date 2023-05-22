@@ -118,27 +118,25 @@ public class AdminCreateEventActivity extends AppCompatActivity {
                     return;
                 }
                 eventID = generateEventID();
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 String eventname = textEventName.getText().toString();
                 String date = textEventDate.getText().toString();
                 String time = textEventTime.getText().toString();
                 String location = textEventLocation.getText().toString();
                 String slot = btnEventSlot.getText().toString();
                 String price = btnEventPrice.getText().toString();
+                String creator = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
                 // Create the event object with an empty list of joinedUsers
                 List<String> joinedUsersList = new ArrayList<>();
 
-                HelperClassEvents helperClassEvents = new HelperClassEvents(eventID, eventname, date, time, location, slot, price, joinedUsersList);
+                HelperClassEvents helperClassEvents = new HelperClassEvents(eventID, userId, eventname, date, time, location, slot, price, joinedUsersList, creator);
 
                 // Add the event to the database
                 reference.child(eventID).setValue(helperClassEvents, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                         if (error == null) {
-                            // Add the current user's ID to the joinedUsersList
-                            String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            joinedUsersList.add(userID);
-
                             // Update the joinedUsersList in the database
                             DatabaseReference joinedUsersRef = ref.child("joinedUsersList");
                             joinedUsersRef.setValue(joinedUsersList)

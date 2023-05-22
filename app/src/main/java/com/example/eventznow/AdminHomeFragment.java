@@ -28,6 +28,7 @@ public class AdminHomeFragment extends Fragment {
     private DatabaseReference eventsRef;
     private RecyclerView recyclerView;
     private EventsAdapter adapter;
+    private String userId;
 
     public AdminHomeFragment() {
         // Required empty public constructor
@@ -52,6 +53,10 @@ public class AdminHomeFragment extends Fragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         recyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
 
+        if (firebaseAuth.getCurrentUser() != null) {
+            userId = firebaseAuth.getCurrentUser().getUid();
+        }
+
         // Listen for changes to the events data and update the adapter
         eventsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -59,12 +64,14 @@ public class AdminHomeFragment extends Fragment {
                 List<HelperClassEvents> eventsList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String eventID = snapshot.child("eventID").getValue(String.class);
+                    String userIdAdmin = snapshot.child("userId").getValue(String.class);
                     String eventname = snapshot.child("eventname").getValue(String.class);
                     String date = snapshot.child("date").getValue(String.class);
                     String time = snapshot.child("time").getValue(String.class);
                     String location = snapshot.child("location").getValue(String.class);
                     String slot = snapshot.child("slot").getValue(String.class);
                     String price = snapshot.child("price").getValue(String.class);
+                    String creator = snapshot.child("creator").getValue(String.class);
 
                     List<String> joinedUsersList = new ArrayList<>();
                     for (DataSnapshot userSnapshot : snapshot.child("joinedUsersList").getChildren()) {
@@ -72,8 +79,10 @@ public class AdminHomeFragment extends Fragment {
                         joinedUsersList.add(userID);
                     }
 
-                    HelperClassEvents event = new HelperClassEvents(eventID, eventname, date, time, location, slot, price, joinedUsersList);
+                    if (userIdAdmin != null && userIdAdmin.equals(userId)) {
+                    HelperClassEvents event = new HelperClassEvents(eventID, userIdAdmin, eventname, date, time, location, slot, price, joinedUsersList, creator);
                     eventsList.add(event);
+                    }
                 }
                 adapter.setEventsList(eventsList);
             }

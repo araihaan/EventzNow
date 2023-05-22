@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Ahmad Raihan Asyam \n Ahmad Fuad \n Alif Tommy Saputra"
+        android:text="Ahmad Raihan Asyam \n Ahmad Fuad"
         android:textColor="@color/mainblue"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

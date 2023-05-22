@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -67,6 +68,9 @@ public class AdminEditEventActivity extends AppCompatActivity {
         BtnEventPrice = findViewById(R.id.btn_price);
         BtnEventSlot = findViewById(R.id.btn_memberpicker);
         BtnUpdateButton = findViewById(R.id.btUpdateEvent);
+
+        FirebaseDatabase database;
+        DatabaseReference eventsRef;
 
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -160,6 +164,7 @@ public class AdminEditEventActivity extends AppCompatActivity {
         String location = TextEventLocation.getText().toString();
         String slot = BtnEventSlot.getText().toString();
         String price = BtnEventPrice.getText().toString();
+        String creator = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         if (eventname.isEmpty() || date.isEmpty() || time.isEmpty() || location.isEmpty() || slot.isEmpty() || price.isEmpty()) {
             Toast.makeText(AdminEditEventActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
@@ -176,21 +181,10 @@ public class AdminEditEventActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     List<String> joinedUsersList = new ArrayList<>();
 
-                    // Add the existing joinedUsers to the list
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String userID = snapshot.getValue(String.class);
-                        if (!joinedUsersList.contains(userID)) {
-                            joinedUsersList.add(userID);
-                        }
-                    }
-
                     // Add the current user's ID to the joinedUsersList
-                    String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    if (!joinedUsersList.contains(userID)) {
-                        joinedUsersList.add(userID);
-                    }
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                    HelperClassEvents updatedEvent = new HelperClassEvents(eventID, eventname, date, time, location, slot, price, joinedUsersList);
+                    HelperClassEvents updatedEvent = new HelperClassEvents(eventID, userId, eventname, date, time, location, slot, price, joinedUsersList, creator);
 
                     reference.setValue(updatedEvent)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -212,6 +206,25 @@ public class AdminEditEventActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(AdminEditEventActivity.this, "Failed to retrieve joined users: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Update the event name in the "orders" node
+        DatabaseReference ordersRef = database.getReference("orders");
+        Query query = ordersRef.orderByChild("eventID").equalTo(eventID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String orderID = snapshot.getKey();
+                    DatabaseReference orderRef = ordersRef.child(orderID);
+                    orderRef.child("eventname").setValue(eventname);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error
             }
         });
     }

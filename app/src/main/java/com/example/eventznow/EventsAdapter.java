@@ -12,8 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -103,13 +106,33 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         // Create a database reference to the "events" node
         DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference().child("events");
 
+        // Create a database reference to the "orders" node
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference().child("orders");
+
         // Delete the event from the database
         eventsRef.child(eventID).removeValue();
+
+        // Delete the corresponding order from the database
+        ordersRef.orderByChild("eventID").equalTo(eventID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                    String orderID = orderSnapshot.getKey();
+                    ordersRef.child(orderID).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle potential errors here
+            }
+        });
 
         // Notify the adapter to update the view
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, eventsList.size());
     }
+
 
     @Override
     public int getItemCount() {

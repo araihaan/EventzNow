@@ -26,7 +26,7 @@ import java.util.UUID;
 public class MemberEventDetailActivity extends AppCompatActivity {
 
     private TextView eventName, eventDate, eventTime, eventLocation, eventSlot, eventPrice;
-    private Button joinEvent;
+    private Button joinEventButton;
     private String eventID;
     private DatabaseReference eventsRef;
     FirebaseDatabase database;
@@ -45,6 +45,7 @@ public class MemberEventDetailActivity extends AppCompatActivity {
         eventLocation = findViewById(R.id.txtLocationString);
         eventSlot = findViewById(R.id.txtSlotString);
         eventPrice = findViewById(R.id.txtPriceString);
+        joinEventButton = findViewById(R.id.btJoinEvent);
 
         eventsRef = FirebaseDatabase.getInstance().getReference().child("events").child(eventID);
 
@@ -71,56 +72,58 @@ public class MemberEventDetailActivity extends AppCompatActivity {
             }
         });
 
-        Button joinEventButton = findViewById(R.id.btJoinEvent);
         joinEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String price = eventPrice.getText().toString();
                 DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("events").child(eventID);
                 DatabaseReference eventsOrder = FirebaseDatabase.getInstance().getReference("orders");
-                eventRef.child("joinedUsersList").addListenerForSingleValueEvent(new ValueEventListener() {
+                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            List<String> joinedUsersList = new ArrayList<>();
-
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                String userID = snapshot.getValue(String.class);
-                                if (!joinedUsersList.contains(userID)) {
-                                    joinedUsersList.add(userID);
+                            HelperClassEvents event = dataSnapshot.getValue(HelperClassEvents.class);
+                            if (event != null) {
+                                int slot = event.getSlot().equalsIgnoreCase("No Limit") ? -1 : Integer.parseInt(event.getSlot());
+                                List<String> joinedUsersList = event.getJoinedUsersList();
+                                if (joinedUsersList == null) {
+                                    joinedUsersList = new ArrayList<>();
                                 }
-                            }
 
-                            String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                            if (joinedUsersList.contains(userID)) {
-                                Toast.makeText(MemberEventDetailActivity.this, "You already joined this event", Toast.LENGTH_SHORT).show();
-                            } else {
-                                if (price.equalsIgnoreCase("Free")) {
-                                    joinedUsersList.add(userID);
-                                    eventRef.child("joinedUsersList").setValue(joinedUsersList).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                            String orderID = generateOrderID();
-                                            String eventname = eventName.getText().toString();
-                                            HelperEventOrder helperEventOrder = new HelperEventOrder(userId, eventID, orderID, eventname, "-", "1", "Free", "Registered");
-                                            eventsOrder.child(orderID).setValue(helperEventOrder);
-                                            Intent intent = new Intent(MemberEventDetailActivity.this, MemberJoinedEventActivity.class);
-                                            intent.putExtra("orderID", orderID);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(MemberEventDetailActivity.this, "Failed to join event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                if (joinedUsersList.contains(userID)) {
+                                    Toast.makeText(MemberEventDetailActivity.this, "You already joined this event", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Intent intent = new Intent(MemberEventDetailActivity.this, MemberEventBuyActivity.class);
-                                    intent.putExtra("eventID", eventID);
-                                    startActivity(intent);
+                                    if (slot == -1 || joinedUsersList.size() < slot) {
+                                        joinedUsersList.add(userID);
+                                        eventRef.child("joinedUsersList").setValue(joinedUsersList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                String orderID = generateOrderID();
+                                                String eventname = eventName.getText().toString();
+                                                HelperEventOrder helperEventOrder = new HelperEventOrder(userId, eventID, orderID, eventname, "-", "1", price, "Registered");
+                                                eventsOrder.child(orderID).setValue(helperEventOrder);
+                                                Intent intent;
+                                                if (price.equalsIgnoreCase("Free")) {
+                                                    intent = new Intent(MemberEventDetailActivity.this, MemberJoinedEventActivity.class);
+                                                } else {
+                                                    intent = new Intent(MemberEventDetailActivity.this, MemberEventBuyActivity.class);
+                                                }
+                                                intent.putExtra("orderID", orderID);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(MemberEventDetailActivity.this, "Failed to join event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(MemberEventDetailActivity.this, "This event is full", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         }
@@ -128,7 +131,7 @@ public class MemberEventDetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(MemberEventDetailActivity.this, "Failed to retrieve joined users: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MemberEventDetailActivity.this, "Failed to retrieve event details: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

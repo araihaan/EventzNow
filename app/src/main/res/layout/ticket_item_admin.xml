@@ -22,12 +22,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/createdby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Status : "
+        android:text="Created by : "
         android:textColor="@color/mainblue"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -35,14 +35,14 @@
         app:layout_constraintTop_toBottomOf="@+id/eventName" />
 
     <TextView
-        android:id="@+id/eventstatus"
+        android:id="@+id/creatoremail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="@color/mainblue"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintStart_toEndOf="@+id/status"
+        app:layout_constraintStart_toEndOf="@+id/createdby"
         app:layout_constraintTop_toBottomOf="@+id/eventName" />
 
     <ImageView
