@@ -17,6 +17,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions "mode" // Define a named flavor dimension
+
+    // Define Merchant BASE URL and CLIENT KEY for each flavors
+    productFlavors {
+        sandbox {
+            dimension "mode" // Assign the flavor to the named flavor dimension
+            applicationId = "com.example.eventznow"
+            buildConfigField "String", "BASE_URL", "\"https://merchant-url-sandbox.com/\""
+            buildConfigField "String", "CLIENT_KEY", "\"SB-Mid-client-Y310HP4RBR8X2Fpq\""
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -39,6 +51,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.firebase:firebase-auth:22.0.0'
+    implementation 'com.google.firebase:firebase-storage:20.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

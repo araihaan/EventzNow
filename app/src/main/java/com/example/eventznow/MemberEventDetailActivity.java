@@ -96,24 +96,31 @@ public class MemberEventDetailActivity extends AppCompatActivity {
                                     Toast.makeText(MemberEventDetailActivity.this, "You already joined this event", Toast.LENGTH_SHORT).show();
                                 } else {
                                     if (slot == -1 || joinedUsersList.size() < slot) {
-                                        joinedUsersList.add(userID);
                                         eventRef.child("joinedUsersList").setValue(joinedUsersList).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                                String orderID = generateOrderID();
-                                                String eventname = eventName.getText().toString();
-                                                HelperEventOrder helperEventOrder = new HelperEventOrder(userId, eventID, orderID, eventname, "-", "1", price, "Registered");
-                                                eventsOrder.child(orderID).setValue(helperEventOrder);
-                                                Intent intent;
                                                 if (price.equalsIgnoreCase("Free")) {
+                                                    String orderID = generateOrderID();
+                                                    List<String> joinedUsersList = event.getJoinedUsersList();
+                                                    if (!joinedUsersList.contains(userID)) {
+                                                        joinedUsersList.add(userID);
+                                                    }
+                                                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                    String eventname = eventName.getText().toString();
+                                                    HelperEventOrder helperEventOrder = new HelperEventOrder(userId, eventID, orderID, eventname, "-", "1", price, "Registered");
+                                                    eventsOrder.child(orderID).setValue(helperEventOrder);
+                                                    Intent intent;
                                                     intent = new Intent(MemberEventDetailActivity.this, MemberJoinedEventActivity.class);
+                                                    intent.putExtra("orderID", orderID);
+                                                    startActivity(intent);
+                                                    finish();
                                                 } else {
+                                                    Intent intent;
                                                     intent = new Intent(MemberEventDetailActivity.this, MemberEventBuyActivity.class);
+                                                    intent.putExtra("eventID", eventID);
+                                                    startActivity(intent);
+                                                    finish();
                                                 }
-                                                intent.putExtra("orderID", orderID);
-                                                startActivity(intent);
-                                                finish();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
