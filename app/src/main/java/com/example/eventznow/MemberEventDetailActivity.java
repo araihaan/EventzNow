@@ -100,20 +100,27 @@ public class MemberEventDetailActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 if (price.equalsIgnoreCase("Free")) {
-                                                    String orderID = generateOrderID();
-                                                    List<String> joinedUsersList = event.getJoinedUsersList();
-                                                    if (!joinedUsersList.contains(userID)) {
-                                                        joinedUsersList.add(userID);
+                                                    if (dataSnapshot.exists()) {
+                                                        HelperClassEvents event = dataSnapshot.getValue(HelperClassEvents.class);
+                                                        List<String> joinedUsersList = event.getJoinedUsersList();
+                                                        if (joinedUsersList == null) {
+                                                            joinedUsersList = new ArrayList<>();
+                                                        }
+                                                        if (!joinedUsersList.contains(userID)) {
+                                                            joinedUsersList.add(userID);
+                                                        }
+                                                        eventRef.child("joinedUsersList").setValue(joinedUsersList);
+                                                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                        String orderID = generateOrderID();
+                                                        String eventname = eventName.getText().toString();
+                                                        String price = eventPrice.getText().toString();
+                                                        HelperEventOrder helperEventOrder = new HelperEventOrder(userId, eventID, orderID, eventname, "under maintenance", "1", price, "Registered");
+                                                        eventsOrder.child(orderID).setValue(helperEventOrder);
+                                                        Intent intent = new Intent(MemberEventDetailActivity.this, MemberJoinedEventActivity.class);
+                                                        intent.putExtra("orderID", orderID);
+                                                        startActivity(intent);
+                                                        finish();
                                                     }
-                                                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                                    String eventname = eventName.getText().toString();
-                                                    HelperEventOrder helperEventOrder = new HelperEventOrder(userId, eventID, orderID, eventname, "-", "1", price, "Registered");
-                                                    eventsOrder.child(orderID).setValue(helperEventOrder);
-                                                    Intent intent;
-                                                    intent = new Intent(MemberEventDetailActivity.this, MemberJoinedEventActivity.class);
-                                                    intent.putExtra("orderID", orderID);
-                                                    startActivity(intent);
-                                                    finish();
                                                 } else {
                                                     Intent intent;
                                                     intent = new Intent(MemberEventDetailActivity.this, MemberEventBuyActivity.class);
