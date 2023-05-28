@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +27,7 @@ public class AdminLoginActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
+    private TextView registerText;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -41,6 +45,7 @@ public class AdminLoginActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.etEmail);
         passwordEditText = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.btAdminLogin);
+        registerText = findViewById(R.id.textRegister);
 
         loginButton.setOnClickListener(v -> {
             // Get the values from the input fields
@@ -98,6 +103,15 @@ public class AdminLoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
+        });
+
+        registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminLoginActivity.this, AdminRegisterActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 
